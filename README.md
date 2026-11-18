@@ -1,45 +1,32 @@
 # Joey Chang | Embedded systems and robotics
 
-I studied computer engineering at UC Irvine. These projects cover two parts of my work: writing firmware for a physical board and integrating a companion computer with a flight controller.
+I’m a computer engineering graduate from UC Irvine looking for embedded software, robotics integration, and firmware validation roles in Southern California. I wrote receiver-side firmware for a wireless charging station and worked on two drone projects with Prof. Peter Burke.
+
+[UCI project poster](https://escholarship.org/uc/item/7zb42857) · [Dean’s Choice Award](https://engineering.uci.edu/news/2026/march/eleven-senior-projects-win-deans-choice-awards-at-2026-annual-design-review.php) · [LinkedIn](https://www.linkedin.com/in/joey-chang120101)
 
 ## Wireless drone charging station
 
-**My role:** Receiver-side STM32 firmware on a five-person senior design team. Our project received a Dean’s Choice Award at UCI’s 2026 Annual Design Review.
+On a five-person senior design team, I wrote the receiver-side STM32 firmware. I configured multiple ADC channels, read voltages on the board, and implemented protection logic for overvoltage, undervoltage, and overcurrent. I also helped select the LDO and buck converter ICs and reviewed the receiver schematic.
 
-I configured multiple ADC channels to read voltages along the receiver power path and implemented secondary protection logic for overvoltage, undervoltage, and overcurrent. I also helped select the LDO and buck converter ICs and reviewed the receiver schematic.
-
-### How we tested it
-
-| Test | Method | What it established |
+| Test | Method | Result |
 | --- | --- | --- |
-| Board measurements | I connected the STM32 to a physical input and inspected ADC readings in the development environment. | The firmware acquired readings on the board. |
-| Firmware fault cases | I set ADC values in the STM32 development environment to exercise the protection logic. | I could test the software response without applying damaging electrical conditions. Physical shutdown under a real fault remained unverified. |
-| Receiver isolation | Our team fed the receiver directly from a waveform generator. | This let us test the receiver separately when the transmitter could not supply enough power. |
+| ADC acquisition | I applied an input to the receiver and inspected the ADC channels in the STM32 development environment. | I verified that the board produced ADC readings. |
+| Protection logic | I set ADC values in the development environment to represent the fault conditions. | The test exercised the firmware response to simulated faults. Physical fault shutdown remains unverified. |
+| Receiver bench test | Our team connected a waveform generator directly to the receiver when transmitter power was insufficient. | We could characterize the receiver separately. The team poster reports an 8.4 V battery rail. Charging did not start with the battery connected. |
 
-### Reviewing the results
+Figure 6 of the poster shows the regulated rail. The system diagram shows where the team measured it. This repository documents the prototype and the scope of its tests.
 
-Open the [UCI project poster](https://escholarship.org/uc/item/7zb42857). Start with the system block diagram to trace power from the transmitter through the receiver rectifier and regulator. Then compare the waveforms with the result reported in the abstract. The team reported an 8.4 V battery rail. Charging did not start when the battery was connected. The available measurements leave the cause under load unresolved.
+## Drone integration and testing
 
-The poster documents the team prototype. This repository is a project write-up. The original firmware, board configuration, and bench data are not included, so there is no firmware build to reproduce here.
+In EECS 195, our three-person team assembled a drone from individual components. We integrated the flight controller, ESCs, GPS, radio receiver, and camera, configured ArduPilot, and debugged the hardware connections.
 
-[UCI Annual Design Review award announcement](https://engineering.uci.edu/news/2026/3/eleven-senior-projects-win-deans-choice-awards-2026-annual-design-review)
+In a subsequent three-person independent study, we worked with a Raspberry Pi and the ArduPilot flight controller. We tested two separate functions.
 
-## Drone companion computer integration
+| Function | What we observed |
+| --- | --- |
+| Claude commands through a Model Context Protocol (MCP) server | A physical drone took off and hovered in response to commands. We kept the flight demonstration to those maneuvers because we lacked a suitable flight cage. |
+| YOLO-triggered Return-to-Launch (RTL) | In ground or simulation tests, detections of people or selected objects triggered an RTL command. We tested this separately from the Claude interface. |
 
-Independent Study with Prof. Peter Burke, UC Irvine. We worked together as a three-person team to integrate a Raspberry Pi, YOLO, and an ArduPilot flight controller.
+## Chess engine in C
 
-### Detection-triggered RTL
-
-We tested a workflow that issued Return-to-Launch (RTL) commands when YOLO detected people or selected objects. Testing took place on the ground or in simulation. The intent was to reduce collision risk. The airborne behavior of detection-triggered RTL remains unverified.
-
-### Claude control through MCP
-
-Through a separate MCP server interface, we successfully demonstrated Claude-commanded takeoff and hover on a physical drone. YOLO was tested independently of this interface. Further flight maneuvers remained untested because a suitable drone cage or enclosed test area was unavailable.
-
-## Custom drone build
-
-EECS 195 with Prof. Peter Burke, UC Irvine. In a three-person team, we assembled, configured, and troubleshot a drone from individual components, integrating the flight controller, ESCs, GPS, radio receiver, and camera system. We configured ArduPilot and debugged hardware connections and flight-controller settings together.
-
-## Reproducing the drone work
-
-The original code, hardware configuration, and flight logs are pending inclusion. Reproduction instructions will depend on those materials. The current write-up records the scope of completed testing.
+The engine represents pieces with bitboards and searches moves using negamax with alpha-beta pruning. A move-generation test counted **197,281 legal continuations** four plies from the standard starting position. Depths one through three returned 20, 400, and 8,902. These counts exercise move generation and the make/undo path.
