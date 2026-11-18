@@ -24,8 +24,22 @@ The poster documents the team prototype. This repository is a project write-up. 
 
 [UCI Annual Design Review award announcement](https://engineering.uci.edu/news/2026/3/eleven-senior-projects-win-deans-choice-awards-2026-annual-design-review)
 
-## Drone companion computer and ground telemetry
+## Drone companion computer integration
 
-In an independent study, I integrated a Raspberry Pi Zero 2 W with an ArduPilot flight controller for onboard scripting and camera streaming. I used MAVLink to connect the flight controller to a natural-language command interface. In my drone-building course, I assembled a drone, integrated its flight controller, GPS, and radio receiver, and configured DroneBridge Wi-Fi telemetry to a ground station.
+Independent Study with Prof. Peter Burke, UC Irvine. We worked together as a three-person team to integrate a Raspberry Pi, YOLO, and an ArduPilot flight controller.
 
-The independent study and course build are separate project descriptions. The command interface supported takeoff, waypoint, and landing commands. Flight logs and verification results for individual commands are not included here.
+### Detection-triggered RTL
+
+We tested a workflow that issued Return-to-Launch (RTL) commands when YOLO detected people or selected objects. Testing took place on the ground or in simulation. The intent was to reduce collision risk. The airborne behavior of detection-triggered RTL remains unverified.
+
+### Claude control through MCP
+
+Through a separate MCP server interface, we successfully demonstrated Claude-commanded takeoff and hover on a physical drone. YOLO was tested independently of this interface. Further flight maneuvers remained untested because a suitable drone cage or enclosed test area was unavailable.
+
+## Custom drone build
+
+EECS 195 with Prof. Peter Burke, UC Irvine. In a three-person team, we assembled, configured, and troubleshot a drone from individual components, integrating the flight controller, ESCs, GPS, radio receiver, and camera system. We configured ArduPilot and debugged hardware connections and flight-controller settings together.
+
+## Reproducing the drone work
+
+The original code, hardware configuration, and flight logs are pending inclusion. Reproduction instructions will depend on those materials. The current write-up records the scope of completed testing.
